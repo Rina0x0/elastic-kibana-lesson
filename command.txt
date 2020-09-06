@@ -1,0 +1,6 @@
+# indexの作成
+curl -XPUT 'localhost:9200/{indexname}'
+
+#index状態の確認
+curl -X GET 'localhost:9200/_cat/indices?v&pretty'
+
