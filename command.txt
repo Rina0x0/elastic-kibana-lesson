@@ -4,3 +4,90 @@ curl -XPUT 'localhost:9200/{indexname}'
 #index状態の確認
 curl -X GET 'localhost:9200/_cat/indices?v&pretty'
 
+# kibanaでのコマンド保存用
+GET test_index/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET _cat/health?v
+
+PUT test_index
+
+DELETE test_index
+
+PUT test_index/_mapping
+{
+  "properties": {
+    "description": {
+      "type": "text",
+      "analyzer": "kuromoji"
+    }
+  }
+}
+
+POST test_index/_doc
+{
+  "text": "テストテキストです"
+}
+
+
+GET test_index/_search
+{
+  "query": {
+    "match": {
+      "description": "テスト"
+    }
+  }
+}
+
+GET _analyze
+{
+  "tokenizer": "kuromoji_tokenizer",
+  "text": "関西国際空港"
+}
+
+PUT test_index
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom",
+          "tokenizer": "kuromoji_tokenizer",
+          "char_filter": [
+            "html_strip"
+          ],
+          "filter": [
+            "kuromoji_baseform",
+            "kuromoji_stemmer"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "description": {
+        "type": "text",
+        "analyzer": "my_custom_analyzer"
+      }
+    }
+  }
+}
+
+GET test_index/_search
+{
+  "query": {
+    "match": {
+      "description": "テスト"
+    }
+  }
+}
+
+POST test_index/_doc
+{
+  "description": "テストだよ"
+}
