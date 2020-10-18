@@ -100,3 +100,23 @@ POST test_index/_doc
 {
   "description": "テストだよ"
 }
+
+GET test_index/_search
+{
+  "query": {
+    "term": {
+      "name": {
+        "value": "江國香織"
+      }
+    }
+  }
+}
+
+GET test_index/_search
+{
+  "query": {
+    "match": {
+      "contents": "デューク"
+    }
+  }
+}
